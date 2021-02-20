@@ -37,7 +37,7 @@ public class ReviewServiceTest {
                 .build();
 
         //when
-        review.finishReview();
+        reviewService.finishReview(review);
 
         //then
         assertThat(review.getDone()).isTrue();

@@ -17,6 +17,11 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Transactional
+    public void finishReview(Review review) {
+        review.finishReview();
+    }
+
+    @Transactional
     public Review createNextReview(Review review) {
         ReviewStatus currentReviewStatus = review.getReviewStatus();
 
