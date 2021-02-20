@@ -42,4 +42,8 @@ public class Review {
         done = true;
         finishedDate = LocalDate.now();
     }
+
+    public void changeLearning(Learning learning) {
+        this.learning = learning;
+    }
 }

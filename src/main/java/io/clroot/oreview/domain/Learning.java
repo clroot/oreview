@@ -1,17 +1,13 @@
 package io.clroot.oreview.domain;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -25,7 +21,7 @@ public class Learning {
 
   private String title;
 
-  private LocalDate createAt;
+  private LocalDateTime createAt;
 
   @OneToMany(mappedBy = "learning", cascade = CascadeType.ALL)
   private List<Review> reviewList = new ArrayList<>();
@@ -33,18 +29,11 @@ public class Learning {
   @Builder
   public Learning(String title) {
     this.title = title;
-    this.createAt = LocalDate.now();
+    this.createAt = LocalDateTime.now();
   }
 
-  public Review createFirstReview() {
-    Review firstReview = Review.builder()
-        .learning(this)
-        .dueDate(LocalDate.now().plusDays(ReviewStatus.FIRST.getNextDays()))
-        .reviewStatus(ReviewStatus.FIRST)
-        .build();
-
-    reviewList.add(firstReview);
-
-    return firstReview;
+  public void addReview(Review review) {
+    review.changeLearning(this);
+    this.reviewList.add(review);
   }
 }
