@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,11 +29,33 @@ public class ReviewServiceTest {
 
     @SuppressWarnings("NonAsciiCharacters")
     @Test
+    public void 리뷰_저장_테스트() {
+        //given
+        LocalDate dueDate = LocalDate.now().plusDays(ReviewStatus.FIRST.getNextDays());
+        reviewService.save(Review.builder()
+                .learning(null)
+                .status(ReviewStatus.FIRST)
+                .dueDate(dueDate)
+                .build());
+
+        //when
+        List<Review> reviewList = reviewRepository.findAll();
+
+        //then
+        Review review = reviewList.get(0);
+        assertThat(review.getDone()).isFalse();
+        assertThat(review.getDueDate()).isEqualTo(dueDate);
+        assertThat(review.getLearning()).isNull();
+        assertThat(review.getStatus()).isEqualTo(ReviewStatus.FIRST);
+    }
+
+    @SuppressWarnings("NonAsciiCharacters")
+    @Test
     public void 리뷰_완료_테스트() {
         //given
         Review review = Review.builder()
                 .learning(null)
-                .reviewStatus(ReviewStatus.FIRST)
+                .status(ReviewStatus.FIRST)
                 .dueDate(LocalDate.now().plusDays(ReviewStatus.FIRST.getNextDays()))
                 .build();
 
@@ -51,7 +74,7 @@ public class ReviewServiceTest {
         LocalDate learningDate = LocalDate.now();
         Review first = Review.builder()
                 .learning(null)
-                .reviewStatus(ReviewStatus.FIRST)
+                .status(ReviewStatus.FIRST)
                 .dueDate(learningDate.plusDays(1))
                 .build();
 
@@ -67,5 +90,34 @@ public class ReviewServiceTest {
         assertThat(ChronoUnit.DAYS.between(learningDate, third.getDueDate())).isEqualTo(6);
         assertThat(ChronoUnit.DAYS.between(learningDate, fourth.getDueDate())).isEqualTo(13);
         assertThat(ChronoUnit.DAYS.between(learningDate, last.getDueDate())).isEqualTo(29);
+    }
+
+    @SuppressWarnings("NonAsciiCharacters")
+    @Test
+    public void 이행해야할_리뷰_조회_테스트() {
+        //given
+        LocalDate now = LocalDate.now();
+
+        reviewService.save(Review.builder()
+                .learning(null)
+                .status(ReviewStatus.FIRST)
+                .dueDate(now.minusDays(1)).build());
+        reviewService.save(Review.builder()
+                .learning(null)
+                .status(ReviewStatus.FIRST)
+                .dueDate(now).build());
+        reviewService.save(Review.builder()
+                .learning(null)
+                .status(ReviewStatus.FIRST)
+                .dueDate(now.plusDays((1))).build());
+
+        //when
+        List<Review> reviewList = reviewService.findThatShouldBeDone();
+
+        //then
+        for (Review review : reviewList) {
+            assertThat(review.getDueDate()).isBeforeOrEqualTo(now);
+            assertThat(review.getDone()).isFalse();
+        }
     }
 }

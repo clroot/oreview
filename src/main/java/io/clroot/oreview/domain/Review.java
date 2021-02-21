@@ -22,17 +22,17 @@ public class Review {
     private Learning learning;
 
     @Enumerated(EnumType.STRING)
-    private ReviewStatus reviewStatus;
+    private ReviewStatus status;
 
     private Boolean done = false;
     private LocalDate dueDate;
     private LocalDate finishedDate;
 
     @Builder
-    public Review(Learning learning, LocalDate dueDate, ReviewStatus reviewStatus) {
+    public Review(Learning learning, LocalDate dueDate, ReviewStatus status) {
         this.learning = learning;
         this.dueDate = dueDate;
-        this.reviewStatus = reviewStatus;
+        this.status = status;
     }
 
     public void finishReview() {
