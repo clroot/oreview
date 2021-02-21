@@ -3,6 +3,7 @@ package io.clroot.oreview.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public class Learning {
 
   private String title;
 
-  private LocalDateTime createAt;
+  private LocalDateTime createAt = LocalDateTime.now();
 
   @OneToMany(mappedBy = "learning", cascade = CascadeType.ALL)
   private List<Review> reviewList = new ArrayList<>();
@@ -29,7 +30,6 @@ public class Learning {
   @Builder
   public Learning(String title) {
     this.title = title;
-    this.createAt = LocalDateTime.now();
   }
 
   public void addReview(Review review) {
