@@ -69,7 +69,7 @@ public class LearningControllerTest {
         List<Learning> allLearning = learningRepository.findAll();
         Learning learning = allLearning.get(0);
         assertThat(learning.getTitle()).isEqualTo(title);
-        assertThat(learning.getCreateAt()).isBefore(LocalDateTime.now());
+        assertThat(learning.getCreatedAt()).isBefore(LocalDateTime.now());
 
         List<Review> reviewList = reviewRepository.findAll();
         Review review = reviewList.get(0);

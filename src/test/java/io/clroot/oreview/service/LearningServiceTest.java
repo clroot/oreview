@@ -55,7 +55,7 @@ public class LearningServiceTest {
         //then
         for (Learning learning :
                 learningList) {
-            assertThat(learning.getCreateAt()).isBetween(LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
+            assertThat(learning.getCreatedAt()).isBetween(LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
         }
     }
 }

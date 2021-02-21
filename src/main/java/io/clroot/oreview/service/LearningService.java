@@ -25,22 +25,20 @@ public class LearningService {
         LocalDateTime from = LocalDateTime.of(today, LocalTime.MIN);
         LocalDateTime to = LocalDateTime.of(today.plusDays(1), LocalTime.MIN);
 
-        return learningRepository.findLearningByCreateAtBetween(from, to);
+        return learningRepository.findLearningByCreatedAtBetween(from, to);
     }
 
     @Transactional
     public Learning save(LearningSaveRequestDto requestDto) {
-        Learning learning = requestDto.toEntity();
+        Learning learning = learningRepository.save(requestDto.toEntity());
 
         Review review = Review.builder()
                 .learning(learning)
                 .status(ReviewStatus.FIRST)
-                .dueDate(learning.getCreateAt().toLocalDate().plusDays(1))
+                .dueDate(learning.getCreatedAt().toLocalDate().plusDays(1))
                 .build();
 
         learning.addReview(review);
-        learningRepository.save(learning);
-
 
         return learning;
     }

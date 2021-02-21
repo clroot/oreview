@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Review {
+public class Review extends BaseTimeEntity {
 
     @Id
     @GeneratedValue

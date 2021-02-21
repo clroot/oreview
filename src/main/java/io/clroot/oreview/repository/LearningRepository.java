@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface LearningRepository extends JpaRepository<Learning, Long> {
-    List<Learning> findLearningByCreateAtBetween(LocalDateTime from, LocalDateTime to);
+    List<Learning> findLearningByCreatedAtBetween(LocalDateTime from, LocalDateTime to);
 }
