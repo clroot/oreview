@@ -14,26 +14,26 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class Learning {
+    @Id
+    @GeneratedValue
+    @Column(name = "learning_id")
+    private Long id;
 
-  @Id
-  @GeneratedValue
-  @Column(name = "learning_id")
-  private Long id;
+    private String title;
 
-  private String title;
+    @OneToMany(mappedBy = "learning", cascade = CascadeType.ALL)
+    private final List<Review> reviewList = new ArrayList<>();
 
-  private LocalDateTime createAt = LocalDateTime.now();
+    @CreationTimestamp
+    private LocalDateTime createAt;
 
-  @OneToMany(mappedBy = "learning", cascade = CascadeType.ALL)
-  private List<Review> reviewList = new ArrayList<>();
+    @Builder
+    public Learning(String title) {
+        this.title = title;
+    }
 
-  @Builder
-  public Learning(String title) {
-    this.title = title;
-  }
-
-  public void addReview(Review review) {
-    review.changeLearning(this);
-    this.reviewList.add(review);
-  }
+    public void addReview(Review review) {
+        review.changeLearning(this);
+        this.reviewList.add(review);
+    }
 }
