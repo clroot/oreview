@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -27,11 +28,13 @@ public class ReviewServiceTest {
     @Autowired
     ReviewRepository reviewRepository;
 
+    LocalDateTime now = LocalDateTime.of(2021, 2, 21, 12, 0, 0);
+
     @SuppressWarnings("NonAsciiCharacters")
     @Test
     public void 리뷰_저장_테스트() {
         //given
-        LocalDate dueDate = LocalDate.now().plusDays(ReviewStatus.FIRST.getNextDays());
+        LocalDate dueDate = now.toLocalDate().plusDays(ReviewStatus.FIRST.getNextDays());
         reviewService.save(Review.builder()
                 .learning(null)
                 .status(ReviewStatus.FIRST)
@@ -56,7 +59,7 @@ public class ReviewServiceTest {
         Review review = Review.builder()
                 .learning(null)
                 .status(ReviewStatus.FIRST)
-                .dueDate(LocalDate.now().plusDays(ReviewStatus.FIRST.getNextDays()))
+                .dueDate(now.toLocalDate().plusDays(ReviewStatus.FIRST.getNextDays()))
                 .build();
 
         //when
@@ -71,7 +74,7 @@ public class ReviewServiceTest {
     @Test
     public void 다음_리뷰_생성_테스트() {
         //given
-        LocalDate learningDate = LocalDate.now();
+        LocalDate learningDate = now.toLocalDate();
         Review first = Review.builder()
                 .learning(null)
                 .status(ReviewStatus.FIRST)
@@ -96,27 +99,25 @@ public class ReviewServiceTest {
     @Test
     public void 이행해야할_리뷰_조회_테스트() {
         //given
-        LocalDate now = LocalDate.now();
-
         reviewService.save(Review.builder()
                 .learning(null)
                 .status(ReviewStatus.FIRST)
-                .dueDate(now.minusDays(1)).build());
+                .dueDate(now.toLocalDate().minusDays(1)).build());
         reviewService.save(Review.builder()
                 .learning(null)
                 .status(ReviewStatus.FIRST)
-                .dueDate(now).build());
+                .dueDate(now.toLocalDate()).build());
         reviewService.save(Review.builder()
                 .learning(null)
                 .status(ReviewStatus.FIRST)
-                .dueDate(now.plusDays((1))).build());
+                .dueDate(now.toLocalDate().plusDays((1))).build());
 
         //when
         List<Review> reviewList = reviewService.findThatShouldBeDone();
 
         //then
         for (Review review : reviewList) {
-            assertThat(review.getDueDate()).isBeforeOrEqualTo(now);
+            assertThat(review.getDueDate()).isBeforeOrEqualTo(now.toLocalDate());
             assertThat(review.getDone()).isFalse();
         }
     }
