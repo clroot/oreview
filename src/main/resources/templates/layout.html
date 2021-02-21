@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="header">
+    <div class="border-b border-gray-200 mb-4">
+        <div class="container mx-auto">
+            <div class="px-4 py-2 flex justify-between items-center bg-white sm:py-4 sm:px-6 sm:items-baseline">
+                <div class="flex-shrink min-w-0 flex items-center">
+                    <h1 class="flex-shrink min-w-0 font-bold text-base md:text-xl leading-snug truncate">
+                        <a href="/">오늘의 리뷰</a>
+                    </h1>
+                </div>
+
+                <div class="ml-4 flex flex-shrink-0 items-center">
+                    <div class="hidden sm:flex items-center text-sm md:text-base">
+                        <button class="inline-block rounded-lg font-medium leading-none py-2 px-3 focus:outline-none bg-indigo-50 text-indigo-700"
+                                type="button">
+                            로그아웃
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

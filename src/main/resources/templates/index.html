@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{layout :: header}"></div>
+<div class="container mx-auto">
+    <section class="px-4" id="learning-section">
+        <form method="POST" th:action="@{/learning}">
+            <label class="block text-lg font-medium text-gray-700" for="title">오늘 공부한 것</label>
+            <div class="grid grid-cols-6 my-1 gap-1">
+                <input class="col-span-5 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
+                       id="title" name="title"
+                       placeholder="공부한 것을 입력하세요"
+                       type="text">
+                <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        type="submit">
+                    추가
+                </button>
+            </div>
+        </form>
+        <div class="px-4 border-t border-gray-200">
+            <ul class="list-disc list-outside">
+                <li th:each="learning: ${learningList}">
+                    <p th:text="${learning.getTitle()}">LEARNING_TITLE</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <div class="px-4" id="review-list">
+
+    </div>
+</div>
+</body>
+</html>
