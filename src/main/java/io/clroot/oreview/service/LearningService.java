@@ -1,6 +1,8 @@
 package io.clroot.oreview.service;
 
 import io.clroot.oreview.domain.Learning;
+import io.clroot.oreview.domain.Review;
+import io.clroot.oreview.domain.ReviewStatus;
 import io.clroot.oreview.repository.LearningRepository;
 import io.clroot.oreview.web.dto.LearningSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,16 @@ public class LearningService {
     public Learning save(LearningSaveRequestDto requestDto) {
         Learning learning = requestDto.toEntity();
 
+        Review review = Review.builder()
+                .learning(learning)
+                .status(ReviewStatus.FIRST)
+                .dueDate(learning.getCreateAt().toLocalDate().plusDays(1))
+                .build();
+
+        learning.addReview(review);
         learningRepository.save(learning);
+
+
         return learning;
     }
 }
